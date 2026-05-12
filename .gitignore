@@ -44,6 +44,8 @@ Thumbs.db
 # Frontend specific (Vite, Next.js, etc.)
 .eslintcache
 
+#others
 sql/
 uploads/
 docs/
+frontend/public/pictures
