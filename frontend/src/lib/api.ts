@@ -313,7 +313,9 @@ export type OrderItem = {
 
 export type CreateOrderInput = {
 	phone: string
-	address: string
+	addressDetail: string
+	ward: string
+	province: string
 	items: OrderItem[]
 }
 

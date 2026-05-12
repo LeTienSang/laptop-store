@@ -25,7 +25,7 @@ interface ICountRow extends RowDataPacket {
   total: number;
 }
 
-const mapLaptop = (row: ILaptopRow): ILaptop => ({
+const mapLaptop = (row: ILaptopRow): any => ({
   id: row.id,
   name: row.name,
   cpu: row.cpu,
@@ -34,11 +34,11 @@ const mapLaptop = (row: ILaptopRow): ILaptop => ({
   gpu: row.gpu,
   price: Number(row.price),
   stock: Number(row.stock),
-  brandId: row.brand_id,
+  brand_id: row.brand_id,
   image: row.image,
   description: row.description,
-  brandName: row.brand_name,
-  createdAt: row.created_at,
+  brand_name: row.brand_name,
+  created_at: row.created_at,
 });
 
 const buildLaptopFilters = (query: ILaptopFilterQuery): { where: string; params: Array<string | number> } => {

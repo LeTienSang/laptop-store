@@ -17,7 +17,7 @@ const imageOptions = [
 	'/pictures/laptops/laptop6.jpg',
 ]
 
-const LOCATION_API = 'http://localhost:3001'
+const LOCATION_API = '/api/locations'
 
 type LocationProvince = {
 	idProvince: string
@@ -85,10 +85,12 @@ const CheckoutPageApi = () => {
 			setLoadingProvinces(true)
 			setLocationError(null)
 			try {
-				const { data } = await axios.get<LocationProvince[]>(`${LOCATION_API}/province`)
+				const response = await axios.get<any>(`${LOCATION_API}/provinces`)
 				if (active) {
-					console.log('Location provinces response:', data)
-					setProvinces(data)
+					// Unwrap data from backend envelope { success: true, data: [...] }
+					const provincesList = response.data.data || response.data
+					console.log('Location provinces response:', provincesList)
+					setProvinces(provincesList)
 				}
 			} catch (err) {
 				if (active) {
@@ -117,19 +119,21 @@ const CheckoutPageApi = () => {
 			setLocationError(null)
 			try {
 				const provinceId = String(tempProvinceId)
-				const { data } = await axios.get<LocationCommune[]>(
-					`${LOCATION_API}/commune?idProvince=${encodeURIComponent(provinceId)}`
+				const response = await axios.get<any>(
+					`${LOCATION_API}/communes?idProvince=${encodeURIComponent(provinceId)}`
 				)
 
-				let resolvedCommunes = data
-				if (Array.isArray(data) && data.length === 0) {
-					const { data: allCommunes } = await axios.get<LocationCommune[]>(`${LOCATION_API}/commune`)
-					resolvedCommunes = allCommunes.filter((item) => String(item.idProvince) === provinceId)
+				const responseData = response.data.data || response.data
+				let resolvedCommunes = responseData
+				if (Array.isArray(responseData) && responseData.length === 0) {
+					const { data: allResponse } = await axios.get<any>(`${LOCATION_API}/communes`)
+					const allCommunes = allResponse.data || allResponse
+					resolvedCommunes = allCommunes.filter((item: any) => String(item.idProvince) === provinceId)
 					console.log('Location communes fallback response:', resolvedCommunes)
 				}
 
 				if (active) {
-					console.log('Location communes response:', data)
+					console.log('Location communes response:', responseData)
 					setCommunes(resolvedCommunes)
 				}
 			} catch (err) {
@@ -175,7 +179,9 @@ const CheckoutPageApi = () => {
 
 			await createOrder({
 				phone: form.phone,
-				address: mergedAddress,
+				addressDetail: form.addressDetail,
+				ward: form.communeName,
+				province: form.provinceName,
 				items: orderItems,
 			})
 

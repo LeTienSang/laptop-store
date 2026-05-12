@@ -13,6 +13,7 @@ build/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.example
 
 # Debug logs (File nhật ký lỗi)
 npm-debug.log*
@@ -42,3 +43,6 @@ Thumbs.db
 
 # Frontend specific (Vite, Next.js, etc.)
 .eslintcache
+
+sql/
+uploads/

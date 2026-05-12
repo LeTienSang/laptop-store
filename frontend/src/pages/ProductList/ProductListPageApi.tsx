@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { getLaptops, getBrands, type Laptop, type Brand } from '../../lib/api'
 import MainHeader from '../../components/layouts/MainHeader'
 import MainFooter from '../../components/layouts/MainFooter'
+import PaginationControls from '../../components/common/PaginationControls'
 
 type LaptopView = {
 	id: number
@@ -42,6 +43,9 @@ const ProductListPageApi = () => {
 	const [selectedRam, setSelectedRam] = useState<string>('all')
 	const [selectedStorage, setSelectedStorage] = useState<string>('all')
 	const [selectedGpu, setSelectedGpu] = useState<string>('all')
+	
+	const [currentPage, setCurrentPage] = useState(1)
+	const pageSize = 6
 	const brandNameById = useMemo(() => {
 		const map = new Map<number, string>()
 		brands.forEach((brand) => map.set(brand.id, brand.name))
@@ -138,6 +142,20 @@ const ProductListPageApi = () => {
 			return true
 		})
 	}, [viewItems, keyword, selectedBrandId, minPrice, maxPrice, selectedCpu, selectedRam, selectedStorage, selectedGpu, laptops, brandNameById])
+
+	const totalPages = Math.ceil(filtered.length / pageSize)
+	const pagedItems = useMemo(() => {
+		const start = (currentPage - 1) * pageSize
+		return filtered.slice(start, start + pageSize)
+	}, [filtered, currentPage, pageSize])
+
+	useEffect(() => {
+		setCurrentPage(1)
+	}, [keyword, selectedBrandId, minPrice, maxPrice, selectedCpu, selectedRam, selectedStorage, selectedGpu])
+
+	useEffect(() => {
+		window.scrollTo({ top: 0, behavior: 'smooth' })
+	}, [currentPage])
 
 	return (
 		<div className='min-h-screen bg-[#f4f4f4]'>
@@ -320,8 +338,9 @@ const ProductListPageApi = () => {
 					</div>
 				) : (
 					<div className='grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3'>
-						{filtered.map((product) => {
-							const brandLabel = brandNameById.get(product.brand_id) || 'Không rõ hãng'
+						{pagedItems.map((product) => {
+							const laptop = laptops.find(x => x.id === product.id)
+							const brandLabel = laptop?.brandName || brandNameById.get(product.brand_id) || 'Không rõ hãng'
 							return (
 							<Link
 								key={product.id}
@@ -339,6 +358,18 @@ const ProductListPageApi = () => {
 							</Link>
 							)
 						})}
+					</div>
+				)}
+
+				{filtered.length > pageSize && (
+					<div className='mt-8'>
+						<PaginationControls
+							currentPage={currentPage}
+							totalPages={totalPages}
+							totalItems={filtered.length}
+							itemLabel='laptop'
+							onPageChange={setCurrentPage}
+						/>
 					</div>
 				)}
 			</main>

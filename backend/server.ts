@@ -13,6 +13,7 @@ import orderRoutes from './src/routes/orderRoutes';
 import userRoutes from './src/routes/userRoutes';
 import dashboardRoutes from './src/routes/dashboardRoutes';
 import uploadRoutes from './src/routes/uploadRoutes';
+import locationRoutes from './src/routes/locationRoutes';
 import { errorHandler, notFound } from './src/middlewares/errorMiddleware';
 
 dotenv.config();
@@ -73,6 +74,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/locations', locationRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
