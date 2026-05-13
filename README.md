@@ -1,4 +1,4 @@
-# Laptop Store - Hệ thống quản lý cửa hàng laptop
+# Laptop Store
 
 ## Cài đặt
 
