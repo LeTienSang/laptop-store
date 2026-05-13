@@ -10,6 +10,7 @@ import {
 } from '../types';
 import { sendError, sendSuccess } from '../utils/response';
 import { Response } from 'express';
+import { vnAccentSql, removeVnAccents } from '../utils/searchUtils';
 
 interface IOrderRow extends RowDataPacket {
   id: number;
@@ -226,15 +227,24 @@ export const getMyOrders = async (req: IAuthedRequest, res: Response): Promise<R
   );
 };
 
-export const getAllOrders = async (req: IAuthedRequest<Record<string, never>, unknown, unknown, { status?: string }>, res: Response): Promise<Response> => {
-  const status = req.query.status;
+export const getAllOrders = async (req: IAuthedRequest<Record<string, never>, unknown, unknown, { status?: string, keyword?: string }>, res: Response): Promise<Response> => {
+  const { status, keyword } = req.query;
   const params: Array<string> = [];
-  let whereClause = '';
+  const conditions: string[] = [];
 
   if (status && allowedOrderStatuses.includes(status as OrderStatus)) {
-    whereClause = 'WHERE o.status = ?';
+    conditions.push('o.status = ?');
     params.push(status);
   }
+
+  if (keyword) {
+    const term = removeVnAccents(keyword.trim());
+    conditions.push(`(${vnAccentSql('u.name')} LIKE ? OR o.phone LIKE ? OR ${vnAccentSql('o.address')} LIKE ?)`);
+    const termParam = `%${term}%`;
+    params.push(termParam, termParam, termParam);
+  }
+
+  const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
   const [orders] = await pool.query<IOrderRow[]>(
     `SELECT o.id, o.user_id, o.order_date, o.status, o.phone, o.address, u.name AS user_name, u.email AS user_email

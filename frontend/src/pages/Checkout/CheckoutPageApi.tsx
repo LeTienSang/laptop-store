@@ -171,7 +171,7 @@ const CheckoutPageApi = () => {
 		}
 
 		try {
-			const orderItems = items.map(item => ({ id: item.id, qty: item.qty, price: item.price }))
+			const orderItems = items.map(item => ({ laptopId: item.id, quantity: item.qty, price: item.price }))
 			const mergedAddress = [form.addressDetail, form.communeName, form.provinceName]
 				.map((value) => value.trim())
 				.filter(Boolean)

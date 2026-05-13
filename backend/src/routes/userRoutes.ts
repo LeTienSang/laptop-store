@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getUsers, getUserById, createUser, updateUser, deleteUser } from '../controllers/userController';
+import { getUsers, getUserById, createUser, updateUser, deleteUser, changePassword } from '../controllers/userController';
 import { authenticateToken, requireAdmin } from '../middlewares/authMiddleware';
 import { asyncHandler } from '../utils/asyncHandler';
 
@@ -75,5 +75,16 @@ router.put('/:id', authenticateToken, requireAdmin, asyncHandler(updateUser));
  *       - bearerAuth: []
  */
 router.delete('/:id', authenticateToken, requireAdmin, asyncHandler(deleteUser));
+
+/**
+ * @swagger
+ * /api/users/{id}/password:
+ *   patch:
+ *     tags: [Users]
+ *     summary: Change user password
+ *     security:
+ *       - bearerAuth: []
+ */
+router.patch('/:id/password', authenticateToken, requireAdmin, asyncHandler(changePassword));
 
 export default router;

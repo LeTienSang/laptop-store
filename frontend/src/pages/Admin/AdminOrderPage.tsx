@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { getAllOrders, getOrderById, updateOrderStatus, type AdminOrder } from '../../lib/api'
 import PaginationControls from '../../components/common/PaginationControls'
 
-type OrderStatus = 'PENDING' | 'CONFIRMED' | 'SHIPPING' | 'DELIVERED' | 'CANCELLED'
+type OrderStatus = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED'
 
 type Order = {
 	id: number
@@ -21,15 +21,15 @@ type Order = {
 
 // Status colors removed for cleaner interface
 
-const allStatuses: OrderStatus[] = ['PENDING', 'CONFIRMED', 'SHIPPING', 'DELIVERED', 'CANCELLED']
+const allStatuses: OrderStatus[] = ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED']
 
 const fmt = (n: number) => `${n.toLocaleString('vi-VN')} ₫`
 
 const getStatusLabel = (status: OrderStatus): string => {
 	const statusMap: Record<OrderStatus, string> = {
 		PENDING: 'CHỜ DUYỆT',
-		CONFIRMED: 'ĐÃ DUYỆT',
-		SHIPPING: 'ĐANG GIAO',
+		PROCESSING: 'ĐÃ DUYỆT',
+		SHIPPED: 'ĐANG GIAO',
 		DELIVERED: 'ĐÃ GIAO',
 		CANCELLED: 'ĐÃ HỦY',
 	}
@@ -118,11 +118,11 @@ const AdminOrderPage = () => {
 	const totalRevenue = orders.filter((o) => o.status !== 'CANCELLED').reduce((sum, o) => sum + o.total, 0)
 	const deliveredRevenue = orders.filter((o) => o.status === 'DELIVERED').reduce((sum, o) => sum + o.total, 0)
 	const pendingRevenue = orders.filter((o) => o.status === 'PENDING').reduce((sum, o) => sum + o.total, 0)
-	const shippingRevenue = orders.filter((o) => o.status === 'SHIPPING').reduce((sum, o) => sum + o.total, 0)
+	const shippingRevenue = orders.filter((o) => o.status === 'SHIPPED').reduce((sum, o) => sum + o.total, 0)
 	const validOrdersCount = orders.filter((o) => o.status !== 'CANCELLED').length
 	const avgOrderValue = validOrdersCount > 0 ? Math.round(totalRevenue / validOrdersCount) : 0
 	const pendingCount = orders.filter((o) => o.status === 'PENDING').length
-	const shippingCount = orders.filter((o) => o.status === 'SHIPPING').length
+	const shippingCount = orders.filter((o) => o.status === 'SHIPPED').length
 
 	const handleUpdateStatus = async (id: number, status: OrderStatus) => {
 		try {

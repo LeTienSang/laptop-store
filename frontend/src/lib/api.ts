@@ -306,8 +306,8 @@ export async function deleteLaptop(id: number): Promise<void> {
 
 // Orders
 export type OrderItem = {
-	id: number
-	qty: number
+	laptopId: number
+	quantity: number
 	price: number
 }
 
@@ -340,7 +340,7 @@ export async function getMyOrders(): Promise<unknown[]> {
 export type AdminOrder = {
 	id: number
 	orderDate: string
-	status: 'PENDING' | 'CONFIRMED' | 'SHIPPING' | 'DELIVERED' | 'CANCELLED'
+	status: 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED'
 	phone: string
 	address: string
 	userId: number

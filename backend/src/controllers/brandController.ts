@@ -3,6 +3,7 @@ import pool from '../config/db';
 import { IAuthedRequest, IBrand, IBrandRequestBody } from '../types';
 import { sendError, sendSuccess } from '../utils/response';
 import { Response } from 'express';
+import { vnAccentSql, removeVnAccents } from '../utils/searchUtils';
 
 interface IBrandRow extends RowDataPacket {
   id: number;
@@ -16,8 +17,19 @@ const mapBrand = (row: IBrandRow): IBrand => ({
   createdAt: row.created_at,
 });
 
-export const getBrands = async (_req: IAuthedRequest, res: Response): Promise<Response> => {
-  const [rows] = await pool.query<IBrandRow[]>('SELECT id, name, created_at FROM brand ORDER BY name ASC');
+export const getBrands = async (req: IAuthedRequest<Record<string, never>, unknown, unknown, { keyword?: string }>, res: Response): Promise<Response> => {
+  const keyword = req.query.keyword;
+  let query = 'SELECT id, name, created_at FROM brand';
+  const params: string[] = [];
+
+  if (keyword) {
+    const term = removeVnAccents(keyword.trim());
+    query += ` WHERE ${vnAccentSql('name')} LIKE ?`;
+    params.push(`%${term}%`);
+  }
+
+  query += ' ORDER BY name ASC';
+  const [rows] = await pool.query<IBrandRow[]>(query, params);
   return sendSuccess(res, rows.map(mapBrand), 'Brands fetched successfully');
 };
 

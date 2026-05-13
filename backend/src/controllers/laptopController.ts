@@ -3,6 +3,7 @@ import pool from '../config/db';
 import { IAuthedRequest, ILaptop, ILaptopFilterQuery, ILaptopRequestBody } from '../types';
 import { sendError, sendSuccess } from '../utils/response';
 import { Response } from 'express';
+import { vnAccentSql, removeVnAccents } from '../utils/searchUtils';
 
 interface ILaptopRow extends RowDataPacket {
   id: number;
@@ -46,8 +47,9 @@ const buildLaptopFilters = (query: ILaptopFilterQuery): { where: string; params:
   const params: Array<string | number> = [];
 
   if (query.keyword) {
-    conditions.push('l.name LIKE ?');
-    params.push(`%${query.keyword.trim()}%`);
+    const term = removeVnAccents(query.keyword.trim());
+    conditions.push(`${vnAccentSql('l.name')} LIKE ?`);
+    params.push(`%${term}%`);
   }
   if (query.brandId) {
     conditions.push('l.brand_id = ?');

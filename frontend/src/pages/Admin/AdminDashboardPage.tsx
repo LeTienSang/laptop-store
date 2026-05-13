@@ -7,8 +7,8 @@ const shortDate = (date: Date) => date.toLocaleDateString('vi-VN', { day: '2-dig
 
 const statusMeta: Record<AdminOrder['status'], { label: string; color: string }> = {
 	PENDING: { label: 'Chờ duyệt', color: '#f59b24' },
-	CONFIRMED: { label: 'Đã duyệt', color: '#f7b04a' },
-	SHIPPING: { label: 'Đang giao', color: '#f9c178' },
+	PROCESSING: { label: 'Đã duyệt', color: '#f7b04a' },
+	SHIPPED: { label: 'Đang giao', color: '#f9c178' },
 	DELIVERED: { label: 'Đã giao', color: '#fbcfa0' },
 	CANCELLED: { label: 'Đã hủy', color: '#fde2ca' },
 }

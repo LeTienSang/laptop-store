@@ -36,7 +36,7 @@ router.get('/', authenticateToken, requireAdmin, asyncHandler(getAllOrders));
  *     security:
  *       - bearerAuth: []
  */
-router.get('/my', authenticateToken, requireCustomer, asyncHandler(getMyOrders));
+router.get('/my-orders', authenticateToken, requireCustomer, asyncHandler(getMyOrders));
 
 /**
  * @swagger
@@ -58,6 +58,6 @@ router.get('/:id', authenticateToken, asyncHandler(getOrderDetail));
  *     security:
  *       - bearerAuth: []
  */
-router.put('/:id', authenticateToken, requireAdmin, asyncHandler(updateOrderStatus));
+router.put('/:id/status', authenticateToken, requireAdmin, asyncHandler(updateOrderStatus));
 
 export default router;
