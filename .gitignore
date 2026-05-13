@@ -37,7 +37,6 @@ Thumbs.db
 
 # Database specific (Nếu bạn có file backup SQL hoặc DB cục bộ)
 *.bak
-*.sql
 *.mdf
 *.ldf
 

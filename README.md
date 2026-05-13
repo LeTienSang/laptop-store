@@ -1,29 +1,12 @@
 # Laptop Store - Hệ thống quản lý cửa hàng laptop
 
-## Công nghệ sử dụng
-
-### Frontend
-- **React 19** & **TypeScript**
-- **Vite** (Build tool)
-- **Tailwind CSS** (Styling)
-- **React Router Dom** (Routing)
-- **Axios** (API Client)
-
-### Backend
-- **Node.js** & **Express**
-- **TypeScript**
-- **MySQL** (Database)
-- **JWT** (Authentication)
-- **Bcryptjs** (Password Hashing)
-- **Swagger** (API Documentation)
-
-## Hướng dẫn cài đặt
+## Cài đặt
 
 ### 1. Yêu cầu hệ thống
 - Node.js (v18 trở lên)
 - MySQL Server
 
-### 2. Cài đặt Dependencies
+### 2. Cài đặt
 Mở terminal tại thư mục gốc và chạy:
 
 **Cho Backend:**

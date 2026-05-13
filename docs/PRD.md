@@ -3,6 +3,25 @@
 
 ---
 
+## 0. Công nghệ sử dụng
+
+### Frontend
+- **React 19** & **TypeScript**
+- **Vite** (Build tool)
+- **Tailwind CSS** (Styling)
+- **React Router Dom** (Routing)
+- **Axios** (API Client)
+
+### Backend
+- **Node.js** & **Express**
+- **TypeScript**
+- **MySQL** (Database)
+- **JWT** (Authentication)
+- **Bcryptjs** (Password Hashing)
+- **Swagger** (API Documentation)
+
+---
+
 ## 1. Problem Statement
 
 ### 1.1 Bối cảnh
@@ -42,7 +61,7 @@ Xây dựng một nền tảng thương mại điện tử chuyên biệt cho la
 |----|---------|-------|
 | PROD-01 | Xem danh sách laptop | Hiển thị danh sách có phân trang. Mỗi thẻ gồm: tên, giá, ảnh, thương hiệu. |
 | PROD-02 | Lọc đa điều kiện | Lọc đồng thời theo: Thương hiệu, Khoảng giá, CPU, RAM, GPU. Backend dùng dynamic SQL với `WHERE` điều kiện kết hợp. |
-| PROD-03 | Tìm kiếm theo tên | Gọi API `GET /api/laptops?keyword=...`, backend truy vấn `LIKE %keyword%`. Kết quả cập nhật realtime qua React state. |
+| PROD-03 | Tìm kiếm thông minh | Gọi API `GET /api/laptops?keyword=...`. Hỗ trợ **tìm kiếm không dấu** (ví dụ: "may tinh" tìm được "máy tính"). |
 | PROD-04 | Xem chi tiết sản phẩm | Hiển thị đầy đủ thông số: `name, cpu, ram, storage, gpu, price, stock, description, image, brand`. |
 
 **TypeScript Interface:**
@@ -94,7 +113,7 @@ interface IOrder {
   id: number;
   userId: number;
   orderDate: string;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  status: 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
   phone: string;
   address: string;
   items: IOrderItem[];
@@ -120,7 +139,7 @@ interface IOrderItem {
 | ADMIN-03 | Quản lý sản phẩm | CRUD laptop: thêm, sửa, xóa; cập nhật giá, thông số, hình ảnh, tồn kho. |
 | ADMIN-04 | Quản lý thương hiệu | CRUD thương hiệu (Brand): thêm, sửa, xóa. |
 | ADMIN-05 | Quản lý đơn hàng | Xem danh sách tất cả đơn, lọc theo trạng thái, xem chi tiết, cập nhật trạng thái đơn hàng. |
-| ADMIN-06 | Quản lý người dùng | Xem danh sách tài khoản, thông tin cơ bản. |
+| ADMIN-06 | Quản lý người dùng | Xem danh sách, lọc theo vai trò, đổi mật khẩu người dùng, xóa tài khoản. |
 
 ---
 
@@ -286,12 +305,13 @@ Các tính năng sau **sẽ không** được triển khai trong v1. Bất kỳ 
 | PUT | `/api/brands/:id` | Admin | Sửa thương hiệu |
 | DELETE | `/api/brands/:id` | Admin | Xóa thương hiệu |
 | POST | `/api/orders` | Customer | Tạo đơn hàng mới |
-| GET | `/api/orders` | Admin | Tất cả đơn hàng |
+| GET | `/api/orders` | Admin | Tất cả đơn hàng (lọc theo trạng thái + tìm kiếm keyword) |
 | GET | `/api/orders/my` | Customer | Đơn hàng của user hiện tại |
 | GET | `/api/orders/:id` | Customer/Admin | Chi tiết đơn hàng |
 | PUT | `/api/orders/:id` | Admin | Cập nhật trạng thái đơn |
-| GET | `/api/users` | Admin | Danh sách người dùng |
+| GET | `/api/users` | Admin | Danh sách người dùng (tìm kiếm + lọc role) |
 | GET | `/api/users/:id` | Admin | Chi tiết người dùng |
+| PATCH | `/api/users/:id/password` | Admin | Đổi mật khẩu người dùng |
 
 > Tài liệu đầy đủ xem tại `/api-docs` (Swagger UI).
 
@@ -374,7 +394,7 @@ Các tính năng sau **sẽ không** được triển khai trong v1. Bất kỳ 
 |-----|-------------|-----------|-------|
 | `id` | INT | PK, Auto Increment | ID đơn hàng |
 | `order_date` | DATETIME | NOT NULL | Thời điểm đặt hàng |
-| `status` | VARCHAR(50) | NOT NULL | Trạng thái: `PENDING` \| `DELIVERED` |
+| `status` | VARCHAR(50) | NOT NULL | Trạng thái: `PENDING` \| `PROCESSING` \| `SHIPPED` \| `DELIVERED` \| `CANCELLED` |
 | `phone` | VARCHAR(20) | NOT NULL | Số điện thoại giao hàng |
 | `address` | TEXT | NOT NULL | Địa chỉ ghép chuỗi từ FE |
 | `user_id` | INT | FK → `user.id` | Người đặt hàng |
