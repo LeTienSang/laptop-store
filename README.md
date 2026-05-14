@@ -1,4 +1,4 @@
-# Laptop Store - Hệ thống quản lý cửa hàng laptop
+# Laptop Store
 
 ## Cài đặt
 
@@ -49,13 +49,3 @@ npm run dev
 cd frontend
 npm run dev
 ```
-
-## Tính năng
-
-- **Người dùng:** Xem sản phẩm, tìm kiếm, đặt hàng, quản lý lịch sử đơn hàng.
-- **Quản trị viên (Admin):**
-  - Dashboard tổng quan doanh thu và trạng thái đơn hàng.
-  - Quản lý Laptop (Thêm, sửa, xóa, tìm kiếm).
-  - Quản lý Thương hiệu.
-  - Quản lý Đơn hàng (Duyệt đơn, cập nhật trạng thái vận chuyển).
-  - Quản lý Người dùng (Phân quyền, đổi mật khẩu).
