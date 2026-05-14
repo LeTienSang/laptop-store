@@ -38,8 +38,8 @@ const mapLaptop = (row: ILaptopRow): any => ({
   brand_id: row.brand_id,
   image: row.image,
   description: row.description,
-  brand_name: row.brand_name,
-  created_at: row.created_at,
+  brandName: row.brand_name,
+  createdAt: row.created_at,
 });
 
 const buildLaptopFilters = (query: ILaptopFilterQuery): { where: string; params: Array<string | number> } => {

@@ -26,7 +26,7 @@ const mapUser = (row: IUserRow): IUser => ({
   name: row.name,
   email: row.email,
   role: (row.role || '').toUpperCase() as IUser['role'],
-  created_at: row.created_at,
+  createdAt: row.created_at,
 });
 
 export const getUsers = async (req: IAuthedRequest<Record<string, never>, unknown, unknown, { keyword?: string, role?: string }>, res: Response): Promise<Response> => {

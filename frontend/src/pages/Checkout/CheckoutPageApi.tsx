@@ -259,7 +259,7 @@ const CheckoutPageApi = () => {
 										/>
 									</div>
 									<div>
-										<label className='mb-1 block text-xs font-semibold text-[#555]'>Họp</label>
+										<label className='mb-1 block text-xs font-semibold text-[#555]'>Họ</label>
 										<input
 											type='text'
 											required

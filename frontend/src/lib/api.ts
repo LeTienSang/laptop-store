@@ -88,7 +88,7 @@ export type Laptop = {
 	storage: string
 	gpu: string
 	image?: string
-	created_at?: string
+	createdAt?: string
 }
 
 export type Pagination = {
@@ -422,7 +422,7 @@ export type User = {
 	name: string
 	email: string
 	role: 'ADMIN' | 'CUSTOMER'
-	created_at: string
+	createdAt: string
 }
 
 export type CreateUserInput = {

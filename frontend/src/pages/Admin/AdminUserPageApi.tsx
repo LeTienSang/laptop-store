@@ -324,7 +324,7 @@ const AdminUserPageApi = () => {
 														</span>
 													</td>
 													<td className='px-5 py-3.5 text-[#999]'>
-														{new Date(user.created_at).toLocaleDateString('vi-VN')}
+														{new Date(user.createdAt).toLocaleDateString('vi-VN')}
 													</td>
 													<td className='px-5 py-3.5 text-right'>
 														<div className='flex items-center justify-end gap-2'>

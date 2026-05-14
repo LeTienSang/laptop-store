@@ -16,8 +16,8 @@ type Product = {
 	gpu: string
 	stock: number
 	brand_id: number
-	brand_name: string
-	created_at: string
+	brandName?: string
+	createdAt: string
 	image?: string
 }
 
@@ -132,7 +132,7 @@ const HomePage = () => {
 								const priceValue = typeof product.price === 'string' ? Number(product.price) : product.price
 								const displayPrice = Number.isFinite(priceValue) ? priceValue.toLocaleString('vi-VN') : '0'
 								const { image, fallbackImage } = resolveProductImage(product, index)
-								const brandLabel = product.brand_name?.trim() || brandNameById.get(product.brand_id) || 'Không rõ hãng'
+								const brandLabel = product.brandName?.trim() || brandNameById.get(product.brand_id) || 'Không rõ hãng'
 
 								return (
 									<ItemCard
